@@ -1,0 +1,43 @@
+*{
+    box-sizing: border-box;
+}
+
+
+
+.container{
+max-width: 800px;
+padding: 10px;
+margin: 0 auto;
+background-color: bisque;
+}
+
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: auto;
+
+}
+
+.results {
+    display: flex;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 50px;
+    color: blue;
+    margin-bottom: 2px;
+    padding: 5px;
+    text-align: center;
+}
+p{
+    text-align: center;
+    padding: 5px;
+}
+form{
+    padding: 10px;
+    text-align: center:
+}
