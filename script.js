@@ -6,7 +6,6 @@ const photoUrl = 'https://pixabay.com/api/';
 
 
 function displayResults(responseJson) {
-  console.log(responseJson.query.pages);
   // stack overflow link: https://stackoverflow.com/questions/32208902/get-the-value-of-an-object-with-an-unknown-single-key-in-js
   const pageObj = responseJson.query.pages;
   const data = pageObj[Object.keys(pageObj)[0]];
@@ -21,7 +20,6 @@ function displayResults(responseJson) {
 }
 
 function getAnimalInfo(query) {
-  console.log("testing query", query);
   const params = {
     action: 'query',
     prop: 'extracts|pageimages',
@@ -35,7 +33,7 @@ function getAnimalInfo(query) {
 
   const queryString = formatQueryParams(params)
   const url = corsUrl + searchUrl + '?' + queryString;
-  // console.log(url);
+
 
   fetch(url)
     .then(response => {
@@ -45,9 +43,11 @@ function getAnimalInfo(query) {
       throw new Error(response.statusText);
     })
     .then(responseJson => displayResults(responseJson))
+    .then(() => getAnimalPhotos(query))
     .catch(err => {
       $('#js-error-message').text(`Something went wrong: ${err.message}`);
     });
+
 }
 function formatQueryParams(params) {
   const queryItems = Object.keys(params)
@@ -64,7 +64,7 @@ function getAnimalPhotos(query) {
 
   const queryString = formatQueryParams(paramsPhotos)
   const url = corsUrl + photoUrl + '?' + queryString;
-  // console.log(url);
+  
 
   fetch(url)
     .then(response => {
@@ -79,22 +79,17 @@ function getAnimalPhotos(query) {
     });
 }
 
-  function displayPhotos(responseJson) {
-   $('photo-results').empty();
-   const imageHits = responseJson.hits;
-   for (let i = 0; i<imageHits.length; i++){
+function displayPhotos(responseJson) {
+  $('#photo-results').empty();
+  const imageHits = responseJson.hits;
+  for (let i = 0; i < imageHits.length; i++) {
     console.log(imageHits[i]);
     $('#photo-results').append(
       `<img src = ${imageHits[i].webformatURL} alt = ${imageHits[i].tags}>`
     )
     $('#results').removeClass('hidden');
   }
-    // $('#results-list').empty();
-    // $('#results-list').append(`
-    //      <img src = ${data.original.source} alt = ${data.title}>
-    //       `)
-    // $('#results').removeClass('hidden');
-  }
+}
 
 function watchForm() {
   $('form').submit(event => {
@@ -102,7 +97,7 @@ function watchForm() {
     $(`#results-list`).empty();
     const searchTerm = $('#js-search-term').val();
     getAnimalInfo(searchTerm);
-    getAnimalPhotos(searchTerm);
+
   });
 }
 
