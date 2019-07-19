@@ -6,18 +6,27 @@ const photoUrl = 'https://pixabay.com/api/';
 
 
 function displayResults(responseJson) {
-  console.log(responseJson);
+  console.log(responseJson, "Hi");
   // stack overflow link: https://stackoverflow.com/questions/32208902/get-the-value-of-an-object-with-an-unknown-single-key-in-js
   const pageObj = responseJson.query.pages;
+   
   const data = pageObj[Object.keys(pageObj)[0]];
-  const image = data.original ? `<img src = ${data.original.source} alt = ${data.title}>`: "";
-  console.log(image);
+  let htmlData = "";
+  if(data.pageid){
+    const image = data.original ? `<img src = ${data.original.source} alt = ${data.title}>`: "";
+    console.log(image);
+    htmlData = `
+    <h2>${data.title}</h2>
+    ${data.extract}   
+     <p><a href = "https://en.wikipedia.org/wiki/${data.title}"> Click to see more</a></p>
+     ${image} `
+  }
+  else{
+   htmlData = `<h2>no results found for ${data.title}</h2>`
+  }
+ 
   $('#results-list').empty();
-  $('#results-list').append(`
-     <h2>${data.title}</h2>
-     ${data.extract}   
-      <p><a href = "https://en.wikipedia.org/wiki/${data.title}"> Click to see more</a></p>
-      ${image} `)
+  $('#results-list').append(htmlData);
   $('#results').removeClass('hidden');
 }
 
@@ -61,7 +70,8 @@ function formatQueryParams(params) {
 function getAnimalPhotos(query) {
   const paramsPhotos = {
     key: '12715167-87f83a71ab32a82132cd94d80',
-    q: query,
+   q: `"${query}"`,
+  
     image_type: 'photo',
   }
 
